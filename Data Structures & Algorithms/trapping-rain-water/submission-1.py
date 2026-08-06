@@ -1,0 +1,38 @@
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        pre = [0] * len(height)
+        suff = [0] * len(height)
+
+        #
+        # Looking at the diagram, the area between two bars is calculated as:
+        # min (h[l], h[r]) - h[i]
+        #
+        # Now, the job is to find longest bar so far in the array.
+        # That's why, find out longest_so_far from left->right (pre).
+        # And, find out longest_so_far from right->left (suff).
+        # min(pre[i], suff[i]) - h[i] is the area calculated for i.
+        # Sum them together for whole area.
+        #
+
+        i = 0
+        max_so_far = height[0]
+        for h in height:
+            max_so_far = max(h, max_so_far)
+            pre[i] = max_so_far
+            i += 1
+
+        i = len(height) - 1
+        max_so_far = height[i]
+        while i >= 0:
+            h = height[i]
+            max_so_far = max(h, max_so_far)
+            suff[i] = max_so_far
+            i -= 1
+
+        i = 0
+        area = 0
+        while i < len(height):
+            area += min(pre[i], suff[i]) - height[i]
+            i += 1
+
+        return area
